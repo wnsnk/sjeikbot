@@ -1,17 +1,16 @@
 {
-  "name": "twitchbot",
-  "version": "1.0.0",
-  "description": "",
-  "license": "ISC",
-  "author": "",
-  "type": "commonjs",
-  "main": "bot.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "dotenv": "^18.0.8",
-    "tmi.js": "^1.8.5",
-    "ws": "^8.22.0"
-  }
+    "name": "twitchbot",
+    "version": "1.0.0",
+    "description": "",
+    "license": "ISC",
+    "author": "",
+    "type": "module",
+    "main": "bot.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "dotenv": "^18.0.8",
+        "ws": "^8.22.0"
+    }
 }
