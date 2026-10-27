@@ -23,7 +23,7 @@ export default class twitchBot {
     }
 
     rolDeWorst() {
-        return 'Ken ik jou? Rol de worst';
+        return 'Ken ik jou? Rol de worst holysjeRolDeWorst holysjeRolDeWorst holysjeRolDeWorst holysjeRolDeWorst';
     }
 
     mark() {

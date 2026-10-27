@@ -89,6 +89,8 @@ function handleWebSocketMessage(data) {
                             );
                         }
                         sendFlirt();
+                    } else if (message.toLowerCase().includes('mark')) {
+                        sendChatMessage(bot.mark());
                     }
 
                     break;
