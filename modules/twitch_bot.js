@@ -8,17 +8,17 @@ export default class twitchBot {
         let sentence = `@${userName} rolde een ${randomNum}.`;
 
         if (randomNum <= 5) {
-            return `${sentence} Tering slecht..`;
+            return `${sentence} holysjeFacepalm holysjeFacepalm`;
         } else if (randomNum <= 10) {
-            return `${sentence} Matig`;
+            return `${sentence} Matigg holysjeFacepalm`;
         } else if (randomNum <= 15) {
             return `${sentence} Redelijk goed joh`;
         } else if (randomNum <= 19) {
-            return `${sentence} HUTS A NIFFAUW`;
+            return `${sentence} HUTS A NIFFAUW holysjeDuimpie`;
         } else if (randomNum === 20) {
-            return `${sentence} Beter koop je een kraslot`;
+            return `${sentence} Beter koop je een kraslot holysjeDuimpie holysjeDuimpie holysjeDuimpie`;
         } else {
-            return `@${userName} rolde te enthousiast en de dobbelsteen rolde weg :(`;
+            return `@${userName} rolde te enthousiast en de dobbelsteen rolde weg :( holysjeFacepalm`;
         }
     }
 
@@ -31,8 +31,14 @@ export default class twitchBot {
     }
 
     joke() {
-        const jokes = ['Wat is het verschil tussen een appel en een peer?'];
+        const jokes = [
+            'Wat is het verschil tussen een appel en een peer?',
+            'Staat een man op de bus te wachten. zegt de buschauffeur: "Kom er eens vanaf joh"',
+        ];
         return jokes[Math.floor(Math.random() * jokes.length)];
+    }
+    akashiSneeze() {
+        return 'Gezondheid holysjeDuimpie';
     }
 
     remindFollow() {
@@ -40,7 +46,7 @@ export default class twitchBot {
     }
 
     greetNewFollower(userName) {
-        return `@${userName} is de nieuwe sidekick!`;
+        return `@${userName} is de nieuwe sidekick! holysjeDuimpie holysjeDuimpie`;
     }
 
     async flirt(
