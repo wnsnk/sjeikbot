@@ -43,6 +43,24 @@ export default class twitchBot {
         return `@${userName} is de nieuwe sidekick!`;
     }
 
+    async flirt(
+        userName,
+        OAUTH_TOKEN,
+        CLIENT_ID,
+        broadcaster_id,
+        moderator_user_id,
+    ) {
+        const chatters = await this.getChatters(
+            OAUTH_TOKEN,
+            CLIENT_ID,
+            broadcaster_id,
+            moderator_user_id,
+        );
+        const randomChatter =
+            chatters[Math.floor(Math.random() * chatters.length)];
+        return `FIIIIIIET FIEEUW?!?!?! @${userName} flirt met @${randomChatter}`;
+    }
+
     /**
      * checks the cache first and only fetches the active chatters via the twitch api if cache does not exist or is expired
      *

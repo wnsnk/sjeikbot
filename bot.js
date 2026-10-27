@@ -64,18 +64,31 @@ function handleWebSocketMessage(data) {
             // console.log(data);
             switch (data.metadata.subscription_type) {
                 case 'channel.chat.message':
+                    const username = data.payload.event.chatter_user_login;
                     const message = data.payload.event.message.text;
+
                     console.log(
                         `MSG #${data.payload.event.broadcaster_user_login} <${data.payload.event.chatter_user_login}> ${message}`,
                     );
                     if (message.trim() == '!dnd') {
-                        sendChatMessage(
-                            bot.dnd(data.payload.event.chatter_user_login),
-                        );
+                        sendChatMessage(bot.dnd(username));
                     } else if (message.trim() == '!kenikjou') {
                         sendChatMessage(bot.rolDeWorst());
                     } else if (message.trim() == '!mop') {
                         sendChatMessage(bot.joke());
+                    } else if (message.toLowerCase().startsWith('!flirt')) {
+                        async function sendFlirt() {
+                            sendChatMessage(
+                                await bot.flirt(
+                                    username,
+                                    OAUTH_TOKEN,
+                                    CLIENT_ID,
+                                    CHAT_CHANNEL_USER_ID,
+                                    BOT_USER_ID,
+                                ),
+                            );
+                        }
+                        sendFlirt();
                     }
 
                     break;
