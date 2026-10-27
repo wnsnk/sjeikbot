@@ -80,8 +80,9 @@ function handleWebSocketMessage(data) {
 
                     break;
                 case 'channel.follow':
-                    console.log('FOLLOOOOOW');
-                    console.log(data);
+                    sendChatMessage(
+                        bot.greetNewFollower(data.payload.event.user_name),
+                    );
                     break;
             }
             break;
