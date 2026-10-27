@@ -59,6 +59,7 @@ function handleWebSocketMessage(data) {
         case 'session_welcome': // First message you get from the WebSocket server when connecting
             websocketSessionID = data.payload.session.id; // Register the Session ID it gives us
             registerEventSubListeners();
+            remindFollowInterval();
             break;
         case 'notification': // An EventSub notification has occurred, such as channel.chat.message
             // console.log(data);
@@ -76,6 +77,8 @@ function handleWebSocketMessage(data) {
                         sendChatMessage(bot.rolDeWorst());
                     } else if (message.trim() == '!mop') {
                         sendChatMessage(bot.joke());
+                    } else if (message.trim() == '!lengte') {
+                        sendChatMessage(bot.calcPSize(username));
                     } else if (message.toLowerCase().startsWith('!flirt')) {
                         async function sendFlirt() {
                             sendChatMessage(
@@ -94,7 +97,6 @@ function handleWebSocketMessage(data) {
                     } else if (message.toLowerCase().includes('akashi')) {
                         sendChatMessage(bot.akashiSneeze());
                     }
-
                     break;
                 case 'channel.follow':
                     sendChatMessage(
@@ -166,4 +168,12 @@ function registerEventSubListeners() {
     //     },
     //     websocketSessionID,
     // );
+}
+
+async function remindFollowInterval() {
+    setInterval(remindFollow, 1200000);
+}
+
+function remindFollow() {
+    sendChatMessage(bot.remindFollow());
 }

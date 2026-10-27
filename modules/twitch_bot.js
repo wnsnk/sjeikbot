@@ -48,6 +48,18 @@ export default class twitchBot {
     greetNewFollower(userName) {
         return `@${userName} is de nieuwe sidekick! holysjeDuimpie holysjeDuimpie`;
     }
+    calcPSize(userName) {
+        const randomSize = Math.floor(Math.random() * 40 + 1);
+        const randomDecimal = Math.floor(Math.random() * 9 + 1);
+        let sentence = `@${userName} heeft een lengte van ${randomSize},${randomDecimal}cm in de boks hangen.`;
+        if (randomSize <= 12) {
+            return `${sentence} Het is vast koud hier.`;
+        } else if (randomSize > 25) {
+            return `Jeeeezus.... ${sentence}`;
+        } else {
+            return sentence;
+        }
+    }
 
     async flirt(
         userName,
@@ -158,11 +170,12 @@ async function fetchChatters(
         for (const user of result['data']) {
             if (
                 user['user_login'] === 'nightbot' ||
-                user['user_login' === 'streamelements']
+                user['user_login'] === 'streamelements'
             ) {
-                continue;
+                console.log('ignored: ' + user['user_login']);
+            } else {
+                userNames.push(user['user_name']);
             }
-            userNames.push(user['user_name']);
         }
         return userNames;
     } catch (error) {
