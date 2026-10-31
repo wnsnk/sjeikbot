@@ -1,15 +1,20 @@
 import twitchBot from './modules/twitch_bot.js';
 import registerEventSub from './modules/registerSubscription.js';
-const bot = new twitchBot();
+
 import WebSocket from 'ws';
 import 'dotenv/config';
 
-const BOT_USER_ID = process.env.TWITCH_BOT_USER_ID; // This is the User ID of the chat bot
 const OAUTH_TOKEN = process.env.USER_ACCESS_TOKEN; // Needs scopes user:bot, user:read:chat, user:write:chat
 const CLIENT_ID = process.env.CLIENT_ID;
-const CHAT_CHANNEL_USER_ID = process.env.TWITCH_CHANNEL_USER_ID; // This is the User ID of the channel that the bot will join and listen to chat messages of
+const BROADCASTER_USER_ID = process.env.TWITCH_CHANNEL_USER_ID; // This is the User ID of the channel that the bot will join and listen to chat messages of
+const BOT_USER_ID = process.env.TWITCH_BOT_USER_ID; // This is the User ID of the chat bot
 const EVENTSUB_WEBSOCKET_URL = 'wss://eventsub.wss.twitch.tv/ws';
-
+const bot = new twitchBot(
+    OAUTH_TOKEN,
+    CLIENT_ID,
+    BROADCASTER_USER_ID,
+    BOT_USER_ID,
+);
 let websocketSessionID;
 
 // Start executing the bot from here
@@ -59,7 +64,6 @@ function handleWebSocketMessage(data) {
         case 'session_welcome': // First message you get from the WebSocket server when connecting
             websocketSessionID = data.payload.session.id; // Register the Session ID it gives us
             registerEventSubListeners();
-            remindFollowInterval();
             break;
         case 'notification': // An EventSub notification has occurred, such as channel.chat.message
             // console.log(data);
@@ -68,67 +72,24 @@ function handleWebSocketMessage(data) {
                     const username = data.payload.event.chatter_user_login;
                     const message = data.payload.event.message.text;
 
-                    console.log(
-                        `MSG #${data.payload.event.broadcaster_user_login} <${data.payload.event.chatter_user_login}> ${message}`,
-                    );
-                    if (message.trim() == '!dnd') {
-                        sendChatMessage(bot.dnd(username));
-                    } else if (message.trim() == '!kenikjou') {
-                        sendChatMessage(bot.rolDeWorst());
-                    } else if (message.trim() == '!mop') {
-                        sendChatMessage(bot.joke());
-                    } else if (message.trim() == '!lengte') {
-                        sendChatMessage(bot.calcPSize(username));
-                    } else if (message.toLowerCase().startsWith('!flirt')) {
-                        async function sendFlirt() {
-                            sendChatMessage(
-                                await bot.flirt(
-                                    username,
-                                    OAUTH_TOKEN,
-                                    CLIENT_ID,
-                                    CHAT_CHANNEL_USER_ID,
-                                    BOT_USER_ID,
-                                ),
-                            );
-                        }
-                        sendFlirt();
-                    } else if (message.toLowerCase().includes('mark')) {
-                        sendChatMessage(bot.mark());
-                    } else if (message.toLowerCase().includes('akashi')) {
-                        sendChatMessage(bot.akashiSneeze());
+                    console.log(`<${username}> ${message}`);
+                    bot.respond(username, message);
+                case 'channel.follow':
+                    bot.greetNewFollower(data.payload.event.user_name);
+                    break;
+                case 'channel.subscribe':
+                    if (!data.payload.event.is_gift) {
+                        bot.thankSubscriber(data.payload.event.user_name);
                     }
                     break;
-                case 'channel.follow':
-                    sendChatMessage(
-                        bot.greetNewFollower(data.payload.event.user_name),
+                case 'channel.subscribe.gift':
+                    bot.thankGiftSub(
+                        data.payload.event.user_name,
+                        data.payload.event.total,
                     );
                     break;
             }
             break;
-    }
-}
-
-async function sendChatMessage(chatMessage) {
-    let response = await fetch('https://api.twitch.tv/helix/chat/messages', {
-        method: 'POST',
-        headers: {
-            Authorization: 'Bearer ' + OAUTH_TOKEN,
-            'Client-Id': CLIENT_ID,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            broadcaster_id: CHAT_CHANNEL_USER_ID,
-            sender_id: BOT_USER_ID,
-            message: chatMessage,
-        }),
-    });
-
-    if (response.status != 200) {
-        let data = await response.json();
-        console.error('Failed to send chat message');
-        console.error(data);
-    } else {
-        console.log('Sent chat message: ' + chatMessage);
     }
 }
 
@@ -137,7 +98,7 @@ function registerEventSubListeners() {
         'channel.chat.message',
         '1',
         {
-            broadcaster_user_id: CHAT_CHANNEL_USER_ID,
+            broadcaster_user_id: BROADCASTER_USER_ID,
             user_id: BOT_USER_ID,
         },
         websocketSessionID,
@@ -146,7 +107,7 @@ function registerEventSubListeners() {
         'channel.follow',
         '2',
         {
-            broadcaster_user_id: CHAT_CHANNEL_USER_ID,
+            broadcaster_user_id: BROADCASTER_USER_ID,
             moderator_user_id: BOT_USER_ID,
         },
         websocketSessionID,
@@ -156,7 +117,7 @@ function registerEventSubListeners() {
     //     'channel.subscribe',
     //     '1',
     //     {
-    //         broadcaster_user_id: CHAT_CHANNEL_USER_ID,
+    //         broadcaster_user_id: BROADCASTER_USER_ID,
     //     },
     //     websocketSessionID,
     // );
@@ -164,16 +125,8 @@ function registerEventSubListeners() {
     //     'channel.subscribe.gift',
     //     '1',
     //     {
-    //         broadcaster_user_id: CHAT_CHANNEL_USER_ID,
+    //         broadcaster_user_id: BROADCASTER_USER_ID,
     //     },
     //     websocketSessionID,
     // );
-}
-
-async function remindFollowInterval() {
-    setInterval(remindFollow, 1200000);
-}
-
-function remindFollow() {
-    sendChatMessage(bot.remindFollow());
 }
