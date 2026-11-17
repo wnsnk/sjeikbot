@@ -1,11 +1,18 @@
 'use strict';
 
 export default class twitchBot {
-    constructor(OAUTH_TOKEN, CLIENT_ID, BROADCASTER_USER_ID, BOT_USER_ID) {
+    constructor(
+        OAUTH_TOKEN,
+        CLIENT_ID,
+        BROADCASTER_USER_ID,
+        BOT_USER_NAME,
+        BOT_USER_ID,
+    ) {
         this.OAUTH_TOKEN = OAUTH_TOKEN;
         this.CLIENT_ID = CLIENT_ID;
         this.BROADCASTER_USER_ID = BROADCASTER_USER_ID;
-        this.BOT_USER_ID = BOT_USER_ID;
+        ((this.BOT_USER_NAME = BOT_USER_NAME),
+            (this.BOT_USER_ID = BOT_USER_ID));
         // TEST IF THIS WORKS this.viewerscache and this.startRemindFollowInterval
         this.viewersCache = {};
         this.startRemindFollowInterval();
@@ -16,6 +23,9 @@ export default class twitchBot {
      * @param {string} message - The message send.
      */
     respond(userName, message) {
+        if (userName === this.BOT_USER_NAME) {
+            return;
+        }
         message = message.toLowerCase();
         switch (true) {
             // STARTSWITH

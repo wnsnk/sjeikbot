@@ -7,12 +7,14 @@ import 'dotenv/config';
 const OAUTH_TOKEN = process.env.USER_ACCESS_TOKEN; // Needs scopes user:bot, user:read:chat, user:write:chat
 const CLIENT_ID = process.env.CLIENT_ID;
 const BROADCASTER_USER_ID = process.env.TWITCH_CHANNEL_USER_ID; // This is the User ID of the channel that the bot will join and listen to chat messages of
+const BOT_USER_NAME = process.env.TWITCH_BOT_NAME;
 const BOT_USER_ID = process.env.TWITCH_BOT_USER_ID; // This is the User ID of the chat bot
 const EVENTSUB_WEBSOCKET_URL = 'wss://eventsub.wss.twitch.tv/ws';
 const bot = new twitchBot(
     OAUTH_TOKEN,
     CLIENT_ID,
     BROADCASTER_USER_ID,
+    BOT_USER_NAME,
     BOT_USER_ID,
 );
 let websocketSessionID;
