@@ -130,6 +130,7 @@ export default class twitchBot {
         const jokes = [
             'Wat is het verschil tussen een appel en een peer?',
             'Staat een man op de bus te wachten. zegt de buschauffeur: "Kom er eens vanaf joh"',
+            'Gooit een man een brief in de bus, zegt de buschauffeur: "Wat moet ik hier mee?"',
         ];
         this.sendChatMessage(jokes[Math.floor(Math.random() * jokes.length)]);
     }
