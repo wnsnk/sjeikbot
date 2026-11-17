@@ -140,7 +140,7 @@ export default class twitchBot {
         this.sendChatMessage('Ga effe volgen ofzo joh');
     }
     async startRemindFollowInterval() {
-        setInterval(this.remindFollow, 1200000);
+        setInterval(() => this.remindFollow(), 1200000);
     }
 
     greetNewFollower(userName) {
