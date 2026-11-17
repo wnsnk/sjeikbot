@@ -44,6 +44,12 @@ export default class twitchBot {
             case message.startsWith('!flirt'):
                 this.flirt(userName);
                 break;
+            case message.startsWith('!lurk'):
+                this.lurk(userName);
+                break;
+            case message.startsWith('!unlurk'):
+                this.unlurk(userName);
+                break;
             // INCLUDES
             case message.includes('mark'):
                 this.mark();
@@ -81,6 +87,12 @@ export default class twitchBot {
     }
 
     // CHAT COMMANDS
+    lurk(userName) {
+        this.sendChatMessage(`@${userName} is ff een peukie roken.`);
+    }
+    unlurk(userName) {
+        this.sendChatMessage(`@${userName} heeft de peuk op. Welkom terug`);
+    }
     dnd(userName) {
         let randomNum = Math.floor(Math.random() * 21) + 1;
         let sentence = `@${userName} rolde een ${randomNum}.`;
