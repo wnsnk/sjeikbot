@@ -26,6 +26,8 @@ export default class twitchBot {
         if (userName.toLowerCase() === this.BOT_USER_NAME.toLowerCase()) {
             return;
         }
+        this.busDriverQuote(message);
+
         message = message.toLowerCase();
         switch (true) {
             // STARTSWITH
@@ -136,6 +138,15 @@ export default class twitchBot {
     }
     akashiSneeze() {
         this.sendChatMessage('Gezondheid holysjeDuimpie');
+    }
+    busDriverQuote(message) {
+        const randomNum = Math.random();
+        if (randomNum < 0.01) {
+            const quote = `Zegt de buschauffeur: "${message}"`;
+            if (quote.length < 500) {
+                this.sendChatMessage(quote);
+            }
+        }
     }
     calcPSize(userName) {
         const randomSize = Math.floor(Math.random() * 40 + 1);
