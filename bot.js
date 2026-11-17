@@ -75,6 +75,7 @@ function handleWebSocketMessage(data) {
                     console.log(`<${username}> ${message}`);
                     bot.respond(username, message);
                 case 'channel.follow':
+                    console.log('SOMEONE FOLLOWED');
                     bot.greetNewFollower(data.payload.event.user_name);
                     break;
                 case 'channel.subscribe':
