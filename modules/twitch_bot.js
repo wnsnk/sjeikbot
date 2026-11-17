@@ -76,17 +76,21 @@ export default class twitchBot {
         let sentence = `@${userName} rolde een ${randomNum}.`;
 
         if (randomNum <= 5) {
-            return `${sentence} holysjeFacepalm holysjeFacepalm`;
+            this.sendChatMessage(`${sentence} holysjeFacepalm holysjeFacepalm`);
         } else if (randomNum <= 10) {
-            return `${sentence} Matigg holysjeFacepalm`;
+            this.sendChatMessage(`${sentence} Matigg holysjeFacepalm`);
         } else if (randomNum <= 15) {
-            return `${sentence} Redelijk goed joh`;
+            this.sendChatMessage(`${sentence} Redelijk goed joh`);
         } else if (randomNum <= 19) {
-            return `${sentence} HUTS A NIFFAUW holysjeDuimpie`;
+            this.sendChatMessage(`${sentence} HUTS A NIFFAUW holysjeDuimpie`);
         } else if (randomNum === 20) {
-            return `${sentence} Beter koop je een kraslot holysjeDuimpie holysjeDuimpie holysjeDuimpie`;
+            this.sendChatMessage(
+                `${sentence} Beter koop je een kraslot holysjeDuimpie holysjeDuimpie holysjeDuimpie`,
+            );
         } else {
-            return `@${userName} rolde te enthousiast en de dobbelsteen rolde weg :( holysjeFacepalm`;
+            this.sendChatMessage(
+                `@${userName} rolde te enthousiast en de dobbelsteen rolde weg :( holysjeFacepalm`,
+            );
         }
     }
 
