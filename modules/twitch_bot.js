@@ -23,7 +23,7 @@ export default class twitchBot {
      * @param {string} message - The message send.
      */
     respond(userName, message) {
-        if (userName === this.BOT_USER_NAME) {
+        if (userName.toLowerCase() === this.BOT_USER_NAME.toLowerCase()) {
             return;
         }
         message = message.toLowerCase();
