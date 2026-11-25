@@ -4,64 +4,66 @@ import { Strategy } from 'passport-twitch-strategy';
 import 'dotenv/config';
 import express from 'express';
 import open from 'open';
+import writeDotEnvFile from './editDotEnv.js';
 
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const SCOPE = process.env.SCOPE;
+export default class tokenGenerator {
+    constructor(clientID, clientSecret, scope, port) {
+        this.clientID = clientID;
+        this.clientSecret = clientSecret;
+        this.scope = scope;
+        this.port = port;
 
-const app = express();
-const port = 3000;
+        this.app = express();
+        this.server = this.app.listen(this.port);
+        this.authURL = 'https://id.twitch.tv/oauth2/authorize?';
+        this.authURL += new URLSearchParams({
+            client_id: this.clientID,
+            force_verify: true,
+            redirect_uri: `http://localhost:${this.port}/auth/twitch/callback`,
+            response_type: 'token',
+            scope: this.scope,
+        }).toString();
+        console.log(this);
+    }
 
-let url = 'https://id.twitch.tv/oauth2/authorize?';
-url += new URLSearchParams({
-    client_id: CLIENT_ID,
-    force_verify: true,
-    redirect_uri: 'http://localhost:3000/auth/twitch/callback',
-    response_type: 'token',
-    scope: SCOPE,
-}).toString();
+    authenticate(dotEnvFile) {
+        this.app.use(passport.initialize());
+        passport.use(
+            'twitch',
+            new Strategy(
+                {
+                    clientID: this.clientID,
+                    clientSecret: this.clientSecret,
+                    callbackURL: `http://localhost:${this.port}/auth/twitch/callback`,
+                    scope: this.scope,
+                },
+                function (accessToken, refreshToken, profile, done) {
+                    writeDotEnvFile(dotEnvFile, accessToken, refreshToken);
+                },
+            ),
+        );
 
-app.use(passport.initialize());
+        passport.serializeUser(function (user, done) {
+            done(null, user);
+        });
 
-passport.use(
-    'twitch',
-    new Strategy(
-        {
-            clientID: CLIENT_ID,
-            clientSecret: CLIENT_SECRET,
-            callbackURL: 'http://localhost:3000/auth/twitch/callback',
-            scope: SCOPE,
-        },
-        function (accessToken, refreshToken, profile, done) {
-            console.log(accessToken, refreshToken, profile, done);
-        },
-    ),
-);
-
-passport.serializeUser(function (user, done) {
-    done(null, user);
-});
-
-passport.deserializeUser(function (user, done) {
-    done(null, user);
-});
-
-app.get('/', function (req, res) {
-    res.send(`<a href="${url}">${url}</a>`);
-});
-
-app.get('/auth/twitch', passport.authenticate('twitch'));
-app.get(
-    '/auth/twitch/callback',
-    passport.authenticate('twitch', { failureRedirect: '/' }),
-    function (req, res) {
-        // Successful authentication, redirect home.
-        console.log('test');
-        res.redirect('/');
-    },
-);
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
-});
-
-open(url);
+        passport.deserializeUser(function (user, done) {
+            done(null, user);
+        });
+        this.app.get('/auth/twitch', passport.authenticate('twitch'));
+        this.app.get(
+            '/auth/twitch/callback',
+            passport.authenticate('twitch', { failureRedirect: '/' }),
+            function (req, res) {
+                // Successful authentication, redirect home.
+                res.redirect('/');
+            },
+        );
+        this.app.listen(this.port, () => {
+            console.log(
+                `Started authentication on:  http://localhost:${this.port}`,
+            );
+        });
+        open(this.authURL);
+    }
+}
