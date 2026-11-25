@@ -15,15 +15,9 @@ chmod +x generate_token.sh
 ### Environment variables
 - Rename .env.example to .env and fill in all fields.
 ### Get user access token
-Future version might do this automatically but for now:
--  <a href='https://dev.twitch.tv/docs/cli/'>Install the Twitch CLI</a>
 ```bash
-./generate_token.sh
+node getToken.js
 ```
-The CLI will ask for client_id and client_secret. You can find these at https://dev.twitch.tv/console under the apps.
-
-- Copy and paste the User Access Token in the .env
-
 ## Updating the bot
 ```bash
 git pull

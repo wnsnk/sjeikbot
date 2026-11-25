@@ -51,8 +51,7 @@ export default class tokenGenerator {
                     console.log(
                         `Succes! The bot is authorised by ${profile.login}`,
                     );
-                    console.log(done);
-                    console.log(typeof done);
+                    this.closeServer();
                 }.bind(this),
             ),
         );
@@ -85,5 +84,6 @@ export default class tokenGenerator {
      */
     closeServer() {
         this.server.close();
+        console.log(`Server for authentication at port: ${this.port} closed.`);
     }
 }
