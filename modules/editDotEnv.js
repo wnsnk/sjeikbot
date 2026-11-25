@@ -1,7 +1,12 @@
 'use strict';
 
 import * as fs from 'fs';
-
+/**
+ * Updates the .env file with new User Access and Refresh Tokens.
+ * @param {string} dotEnvFile - The location of the dotEnvFile.
+ * @param {string} userAccesToken - The new User Access Token.
+ * @param {string} refreshToken - The new Refresh Token.
+ */
 export default function writeDotEnvFile(
     dotEnvFile,
     userAccesToken,
