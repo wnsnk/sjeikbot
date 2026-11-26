@@ -2,3 +2,5 @@
 node_modules
 generateTokenOld.js
 test.js
+self.env
+sjeik.env
