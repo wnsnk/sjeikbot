@@ -37,7 +37,7 @@ export default class tokenGenerator {
      * Opens browser and asks user to authorize. If succesfull it updates the .env file with a new access token.
      * @param {string} dotEnvFile - The location of the .env file
      */
-    async authenticate(dotEnvFile) {
+    async authenticateManually(dotEnvFile) {
         return new Promise((resolve, reject) => {
             this.app.use(
                 session({

@@ -146,7 +146,7 @@ function registerEventSubListeners() {
 async function startAuthentication(dotEnvFile) {
     const generateToken = new TokenGenerator(CLIENT_ID, CLIENT_SECRET, SCOPE);
     console.log('STARTING AUTHENTICATION');
-    await generateToken.authenticate(dotEnvFile);
+    await generateToken.authenticateManually(dotEnvFile);
     if (generateToken.authenticated) {
         generateToken.closeServer();
         OAUTH_TOKEN = generateToken.accessToken;
