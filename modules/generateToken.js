@@ -20,6 +20,7 @@ export default class tokenGenerator {
         this.scope = scope;
         this.port = port;
         this.authenticated = false;
+        this.accessToken = null;
 
         this.app = express();
         this.server = this.app.listen(this.port);
@@ -62,6 +63,7 @@ export default class tokenGenerator {
                             `Succes! Bot authenticated by: ${profile.login}`,
                         );
                         this.authenticated = true;
+                        this.accessToken = accessToken;
                         done(null, profile);
                         resolve(profile);
                     }.bind(this),
