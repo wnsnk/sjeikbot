@@ -8,7 +8,3 @@ const SCOPE = process.env.SCOPE;
 const generateToken = new tokenGenerator(CLIENT_ID, CLIENT_SECRET, SCOPE);
 const thingy = await generateToken.authenticate('.env');
 console.log('WAIT');
-if (generateToken.authenticated) {
-    console.log('succes');
-    generateToken.closeServer();
-}

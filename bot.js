@@ -1,14 +1,17 @@
 import twitchBot from './modules/twitch_bot.js';
 import registerEventSub from './modules/registerSubscription.js';
-
+import tokenGenerator from './modules/generateToken.js';
 import WebSocket from 'ws';
 import 'dotenv/config';
+import TokenGenerator from './modules/generateToken.js';
 
-const OAUTH_TOKEN = process.env.USER_ACCESS_TOKEN; // Needs scopes user:bot, user:read:chat, user:write:chat
+let OAUTH_TOKEN = process.env.USER_ACCESS_TOKEN; // Needs scopes user:bot, user:read:chat, user:write:chat
 const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const BROADCASTER_USER_ID = process.env.TWITCH_CHANNEL_USER_ID; // This is the User ID of the channel that the bot will join and listen to chat messages of
 const BOT_USER_NAME = process.env.TWITCH_BOT_NAME;
 const BOT_USER_ID = process.env.TWITCH_BOT_USER_ID; // This is the User ID of the chat bot
+const SCOPE = process.env.SCOPE;
 const EVENTSUB_WEBSOCKET_URL = 'wss://eventsub.wss.twitch.tv/ws';
 const bot = new twitchBot(
     OAUTH_TOKEN,
@@ -20,6 +23,7 @@ const bot = new twitchBot(
 let websocketSessionID;
 
 // Start executing the bot from here
+function main() {}
 (async () => {
     await getAuth();
     const websocketClient = startWebSocketClient();
@@ -40,6 +44,7 @@ async function getAuth() {
                 response.status,
         );
         console.error(data);
+        await startAuthentication('.env');
         process.exit(1);
     }
     console.log('Validated token.');
@@ -133,4 +138,21 @@ function registerEventSubListeners() {
     //     },
     //     websocketSessionID,
     // );
+}
+/**
+ * Starts the authentication process for a new user acces token.
+ * @param {string} dotEnvFile - Location of the .env file.
+ */
+async function startAuthentication(dotEnvFile) {
+    const generateToken = new TokenGenerator(CLIENT_ID, CLIENT_SECRET, SCOPE);
+    console.log('STARTING AUTHENTICATION');
+    await generateToken.authenticate(dotEnvFile);
+    if (generateToken.authenticated) {
+        generateToken.closeServer();
+        OAUTH_TOKEN = generateToken.accessToken;
+
+        await getAuth();
+        const websocketClient = startWebSocketClient();
+        // AUTH WORKS BUT PRGRAM STOPS NEED TO FIX
+    }
 }
